@@ -54,20 +54,17 @@ jobs:
         # Runs Snyk Code (SAST) analysis and uploads result into GitHub.
         # Use || true to not fail the pipeline
       - name: Snyk Code test
-      - run: |
+        run: |
             npm install snyk -g
             npm install snyk-to-html -g
             snyk auth ${{ secrets.SNYK_TOKEN }}
             snyk code test --json-file-output=SnykTestReport.json
             snyk-to-html -i SnykTestReport.json -o SnykTestReport.html
             mkdir SnykTestReport && cp SnykTestReport.html SnykTestReport
+            
+      - name: Upload artifacts reports      
       - uses: actions/upload-artifact@v3 
         with:
           name: Snyk code Test
           path: SnykTestReport
-        
-        # Push the Snyk Code results into GitHub Code Scanning tab
-      - name: Upload result to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: snyk-code.sarif
+      
