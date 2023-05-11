@@ -1,9 +1,6 @@
 name: Snyk Security
 on:
-  push:
-    branches: ["master" ]
-  pull_request:
-    branches: ["master"]
+ workflow_dispatch:
 
 jobs:
   snyk:
@@ -20,7 +17,7 @@ jobs:
 
      
     - name: Snyk Code test
-      run: |
+    - run: |
             npm install snyk -g
             npm install snyk-to-html -g
             snyk auth ${{ secrets.SNYK_TOKEN }}
